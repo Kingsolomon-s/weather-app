@@ -1,0 +1,203 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Song+Myung&family=Libertinus+Math&&family=Sorts+Mill+Goudy:ital@0;1&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #def2fd;
+}
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding-bottom: 30px;
+  background-color: #000;
+  color: #fff;
+  min-height: 100vh;
+}
+.blue-bg {
+  background-color: #149cf9;
+  padding: 20px 20px 40px 20px;
+  border-bottom-right-radius: 50px;
+  border-bottom-left-radius: 50px;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.04);
+}
+.search-container {
+  max-width: 90%;
+  display: flex;
+  margin: 0 auto;
+  height: 45px;
+  position: relative;
+}
+
+#search {
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 30px;
+  border: none;
+  outline: none;
+  font-size: 1.2rem;
+  background-color: #333;
+  transition: background-color 0.3s ease;
+  padding: 0 50px 0 20px;
+  font-family: 'poppins';
+}
+#search:hover,
+#search:focus,
+#search:active {
+  background-color: white;
+  outline: 2px solid #aaa;
+}
+.search-btn {
+  width: 35px;
+  height: 35px;
+  border: none;
+  background-color: lightsteelblue;
+  border-radius: 50%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 5px;
+  right: 7px;
+}
+.search-btn svg:hover,
+.search-btn svg:focus {
+  cursor: pointer;
+}
+
+.info-container {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'poppins';
+}
+
+.place {
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.icon-container {
+  /*   margin-top: 20px;
+  width: 30%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center; */
+}
+.icon-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.temp {
+  font-size: 6rem;
+  font-weight: 600;
+}
+.temp-feel {
+  font-size: 1.2rem;
+  font-family: 'Libertinus+Math';
+}
+
+.cloud-condition {
+  font-size: 1.7rem;
+}
+.weather-info {
+  margin-top: 25px;
+  width: 80%;
+  height: 105px;
+  padding: 10px 0;
+  border-radius: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.weather-info > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+}
+.weather-info > div:last-child {
+  border-right: none;
+}
+.wind > p:first-of-type,
+.humidity > p:first-of-type,
+.rain > p:first-of-type {
+  font-weight: 600;
+}
+
+.wind img,
+.humidity img,
+.rain img {
+  height: 30px;
+}
+.today {
+  margin: 30px auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  color: #ddd;
+  padding: 0 30px;
+}
+.weather-today {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #bbb;
+  font-family: 'Libertinus+Math';
+}
+.hourly-weather {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: lightslategray transparent;
+}
+.hourly-weather::-webkit-scrollbar {
+  width: 2px;
+}
+.hourly-weather::-webkit-scrollbar-track {
+  background: transparent;
+}
+.hourly-weather::-webkit-scrollbar-thumb {
+  background: lightslategray;
+  border-radius: 3px;
+}
+.hourly-weather::-webkit-scrollbar-thumb:hover {
+  background: grey;
+}
+.hourly-weather > div {
+  border: 1px solid #888;
+  flex-shrink: 0;
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 7px 10px;
+  border-radius: 20px;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.hourlyDataContainer > p:first-child {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+.hourly-weather-icon {
+  height: 60px;
+}
