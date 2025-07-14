@@ -221,7 +221,7 @@ const weatherBackgrounds = {
 }
 
 function setBackground(filename) {
-  container.style.backgroundImage = `url("/images/${filename}")`
+  container.style.backgroundImage = `url("images/${filename}")`
   container.style.backgroundPosition = 'center'
   container.style.backgroundSize = 'cover'
   container.style.backgroundRepeat = 'no-repeat'
