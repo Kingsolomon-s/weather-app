@@ -216,7 +216,6 @@ const weatherBackgrounds = {
   1168: 'freezing-rain.jpeg',
   1171: 'freezing-rain.jpeg',
 
-  // Fallback
   default: 'default.jpg'
 }
 
@@ -309,7 +308,6 @@ async function getDailyForecast() {
     const forecastWeather = await WeatherJson.forecast
     const tomorrowForecastData = await forecastWeather.forecastday[1]
     console.log('tomorrow', tomorrowForecastData)
-    // const tomorrowForecast = document.querySelector('.tomorrow-forecast')
 
     const tomorrowWeatherIcon = document.querySelector('.tomorrow-weather-icon')
     tomorrowWeatherIcon.src = await tomorrowForecastData.day.condition.icon
@@ -353,8 +351,8 @@ async function getDailyForecast() {
       const date = new Date(day.date)
       const formatted = date.toLocaleDateString('en-US', { weekday: 'short' })
       const iconLink = day.day.condition.icon
-      const cloudCondition = day.day.condition.text
-      const temp = day.day.avgtemp_c
+      const dailyCloudCondition = day.day.condition.text
+      const dailyTemp = day.day.avgtemp_c
 
       const firstDayPara = document.createElement('p')
       firstDayPara.textContent = formatted
@@ -363,12 +361,12 @@ async function getDailyForecast() {
       const dayImg = document.createElement('img')
       dayImg.src = iconLink
       const daySpan = document.createElement('span')
-      daySpan.textContent = cloudCondition
+      daySpan.textContent = dailyCloudCondition
       dayDiv.appendChild(dayImg)
       dayDiv.appendChild(daySpan)
 
       const secondDayPara = document.createElement('p')
-      secondDayPara.textContent = `${temp}°C`
+      secondDayPara.textContent = `${dailyTemp}°C`
       secondDayPara.classList.add('daily-temp')
 
       dailyDiv.appendChild(firstDayPara)
