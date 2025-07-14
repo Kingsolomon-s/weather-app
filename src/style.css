@@ -223,7 +223,7 @@ body {
   max-width: 200px;
   width: 100%;
   aspect-ratio: 1;
-  border-radius: 50%;
+  border-radius: 100px;
   background-image: url('./images/moon.jpg');
   background-position: center;
   background-size: cover;
@@ -295,7 +295,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 50px;
+  padding: 10px 40px;
   position: fixed;
   bottom: 3px;
   right: 1px;
