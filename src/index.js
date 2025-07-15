@@ -23,48 +23,55 @@ setTimeout(() => {
   container.style.display = 'block'
 }, 3000)
 
-const dailyForecast = document.querySelector('.daily-forecast')
-const homeContainer = document.querySelector('.home-container')
-const savedLocation = document.querySelector('.saved-location')
-
 const homeButton = document.querySelector('.home')
 const dailyForecastButton = document.querySelector('.days-forecast')
 const savedLocationButton = document.querySelector('.saved')
 
+function showContainer(containerToShow) {
+  const containers = [
+    document.querySelector('.home-container'),
+    document.querySelector('.daily-forecast'),
+    document.querySelector('.saved-location')
+  ]
+
+  containers.forEach(container => {
+    container.style.display = 'none'
+  })
+
+  containerToShow.style.display = 'block'
+
+  containerToShow.scrollTop = 0
+  containerToShow.scrollIntoView({ behaviour: 'instant', block: 'start' })
+}
+
 homeButton.addEventListener('click', () => {
-  dailyForecast.style.display = 'none'
-  savedLocation.style.display = 'none'
-  homeContainer.style.display = 'block'
+  showContainer(document.querySelector('.home-container'))
   homeButton.classList.add('fill')
   dailyForecastButton.classList.remove('fill')
   savedLocationButton.classList.remove('fill')
 })
 
 dailyForecastButton.addEventListener('click', () => {
-  homeContainer.style.display = 'none'
-  savedLocation.style.display = 'none'
-  dailyForecast.style.display = 'block'
+  showContainer(document.querySelector('.daily-forecast'))
   dailyForecastButton.classList.add('fill')
   homeButton.classList.remove('fill')
   savedLocationButton.classList.remove('fill')
 })
 
 savedLocationButton.addEventListener('click', () => {
-  homeContainer.style.display = 'none'
-  dailyForecast.style.display = 'none'
-  savedLocation.style.display = 'block'
+  showContainer(document.querySelector('.saved-location'))
   savedLocationButton.classList.add('fill')
   dailyForecastButton.classList.remove('fill')
   homeButton.classList.remove('fill')
 })
 
-async function getWeather() {
-  try {
-    const apiKey = '8409f078b588400595c175418251107'
-    const numberOfDays = 7
+async function getWeather(cityToFetch = city) {
+  const apiKey = '8409f078b588400595c175418251107'
+  const numberOfDays = 7
 
+  try {
     const fetchWeather =
-      await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=${numberOfDays}&aqi=no&alerts=no
+      await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${cityToFetch}&days=${numberOfDays}&aqi=no&alerts=no
 `)
     if (!fetchWeather.ok) {
       // Check for HTTP errors like 400 (Bad Request for invalid city)
@@ -96,10 +103,9 @@ async function getWeather() {
   }
 }
 
-async function getHourlyForeCast() {
+async function getHourlyForeCast(WeatherJson) {
   try {
-    const { WeatherJson } = await getWeather()
-    const forecastWeather = await WeatherJson.forecast
+    const forecastWeather = WeatherJson.forecast
     const hourlyData = forecastWeather.forecastday[0].hour
 
     const hourlyWeather = document.querySelector('.hourly-weather')
@@ -158,6 +164,87 @@ async function getHourlyForeCast() {
     if (hourlyWeather) {
       hourlyWeather.innerHTML = 'Hourly data is not available at the moment'
     }
+  }
+}
+
+async function getDailyForecast(forecastWeatherJson) {
+  try {
+    const forecastWeather = forecastWeatherJson
+    const tomorrowForecastData = await forecastWeather[1]
+    console.log('tomorrow', tomorrowForecastData)
+
+    const tomorrowWeatherIcon = document.querySelector('.tomorrow-weather-icon')
+    tomorrowWeatherIcon.src = await tomorrowForecastData.day.condition.icon
+
+    const tomorrowTemp = document.querySelector('.tomorrow-temp')
+    tomorrowTemp.textContent = await tomorrowForecastData.day.avgtemp_c
+
+    const tomorrowTempFeel = document.querySelector('.tomorrow-temp-feel')
+    tomorrowTempFeel.textContent = `Max temperature: ${await tomorrowForecastData.day.maxtemp_c}°C`
+
+    const tomorrowCloud = document.querySelector('.tomorrow-cloud')
+    tomorrowCloud.textContent = await tomorrowForecastData.day.condition.text
+
+    const tomorrowWind = document.querySelector('.tomorrow-wind-measurement')
+    tomorrowWind.textContent = `${await tomorrowForecastData.day
+      .maxwind_kph} km/h`
+
+    const tomorrowHumidity = document.querySelector(
+      '.tomorrow-humidity-measurement'
+    )
+    tomorrowHumidity.textContent = `${tomorrowForecastData.day.avghumidity}%`
+
+    const tomorrowRain = document.querySelector('.tomorrow-rain-measurement')
+    tomorrowRain.textContent = `${await tomorrowForecastData.day.daily_will_it_rain}%`
+
+    const upcomingDailyForecast = []
+
+    for (let i = 2; i < forecastWeather.length; i++) {
+      upcomingDailyForecast.push(forecastWeather[i])
+    }
+
+    const nextForecast = document.querySelector('.next-forecast')
+    if (nextForecast) {
+      nextForecast.innerHTML = ''
+    }
+
+    upcomingDailyForecast.forEach(day => {
+      const dailyDiv = document.createElement('div')
+      dailyDiv.classList.add('daily')
+
+      const date = new Date(day.date)
+      const formatted = date.toLocaleDateString('en-US', { weekday: 'short' })
+      const iconLink = day.day.condition.icon
+      const dailyCloudCondition = day.day.condition.text
+      const dailyTemp = day.day.avgtemp_c
+
+      const firstDayPara = document.createElement('p')
+      firstDayPara.textContent = formatted
+
+      const dayDiv = document.createElement('div')
+      const dayImg = document.createElement('img')
+      dayImg.src = iconLink
+      const daySpan = document.createElement('span')
+      daySpan.textContent = dailyCloudCondition
+      dayDiv.appendChild(dayImg)
+      dayDiv.appendChild(daySpan)
+
+      const secondDayPara = document.createElement('p')
+      secondDayPara.textContent = `${dailyTemp}°C`
+      secondDayPara.classList.add('daily-temp')
+
+      dailyDiv.appendChild(firstDayPara)
+      dailyDiv.appendChild(dayDiv)
+      dailyDiv.appendChild(secondDayPara)
+
+      nextForecast.appendChild(dailyDiv)
+    })
+
+    console.log('upcomingDailyForecast: ', upcomingDailyForecast)
+
+    // const new
+  } catch (error) {
+    console.log('Failed to get daily forecast', error)
   }
 }
 
@@ -220,15 +307,15 @@ const weatherBackgrounds = {
 }
 
 function setBackground(filename) {
-  container.style.backgroundImage = `url("images/${filename}")`
-  container.style.backgroundPosition = 'center'
-  container.style.backgroundSize = 'cover'
-  container.style.backgroundRepeat = 'no-repeat'
+  document.body.style.backgroundImage = `url("images/${filename}")`
+  document.body.style.backgroundPosition = 'center'
+  document.body.style.backgroundSize = 'cover'
+  document.body.style.backgroundRepeat = 'no-repeat'
 }
 
-async function displayWeather() {
+async function displayWeather(cityToDisplay = city) {
   try {
-    const { WeatherJson } = await getWeather()
+    const { WeatherJson } = await getWeather(cityToDisplay)
     const currentWeather = await WeatherJson.current
     const forecastWeather = await WeatherJson.forecast
     const weatherLocation = await WeatherJson.location
@@ -268,7 +355,8 @@ async function displayWeather() {
     moonrise.textContent = astronomyTime.moonrise
     moonset.textContent = astronomyTime.moonset
 
-    getHourlyForeCast()
+    getHourlyForeCast(WeatherJson)
+    getDailyForecast(forecastWeather.forecastday)
   } catch (err) {
     console.log(`Failed to display weather data:`, err)
   }
@@ -283,8 +371,7 @@ function fetchValue(e) {
   if (newCity && newCity !== city) {
     city = newCity
     console.log(`searching for: ${city}`)
-    displayWeather()
-    getDailyForecast()
+    displayWeather(city)
   } else if (!newCity) {
     alert('Please enter a city name.')
   }
@@ -300,107 +387,161 @@ locationInput.addEventListener('keypress', e => {
 
 searchBtn.addEventListener('click', fetchValue)
 
-displayWeather()
+displayWeather(city)
 
-async function getDailyForecast() {
+async function getSavedLocationForecast() {
   try {
-    const { WeatherJson } = await getWeather()
-    const forecastWeather = await WeatherJson.forecast
-    const tomorrowForecastData = await forecastWeather.forecastday[1]
-    console.log('tomorrow', tomorrowForecastData)
+    const locations = document.querySelectorAll('.location')
 
-    const tomorrowWeatherIcon = document.querySelector('.tomorrow-weather-icon')
-    tomorrowWeatherIcon.src = await tomorrowForecastData.day.condition.icon
+    const fetchPromises = Array.from(locations).map(async locationDiv => {
+      const savedCitySpan = locationDiv.querySelector(
+        '.city-wrapper > .city-name'
+      )
+      if (!savedCitySpan) {
+        console.warn(
+          'Could not find .city-name span inside .location element. Skipping this location'
+        )
 
-    const tomorrowTemp = document.querySelector('.tomorrow-temp')
-    tomorrowTemp.textContent = await tomorrowForecastData.day.avgtemp_c
+        return null
+      }
 
-    const tomorrowTempFeel = document.querySelector('.tomorrow-temp-feel')
-    tomorrowTempFeel.textContent = `Max temperature: ${await tomorrowForecastData.day.maxtemp_c}°C`
+      const savedCityName = savedCitySpan.textContent.trim()
+      console.log('saved city name', savedCityName)
+      if (!savedCityName) {
+        console.warn('City name is empty for saved location. Skipping.')
+        return null
+      }
 
-    const tomorrowCloud = document.querySelector('.tomorrow-cloud')
-    tomorrowCloud.textContent = await tomorrowForecastData.day.condition.text
+      try {
+        const { WeatherJson } = await getWeather(savedCityName)
+        const currentWeatherData = WeatherJson.current
+        const locationWeatherData = WeatherJson.location
 
-    const tomorrowWind = document.querySelector('.tomorrow-wind-measurement')
-    tomorrowWind.textContent = `${await tomorrowForecastData.day
-      .maxwind_kph} km/h`
+        const savedLocationTemp = locationDiv.querySelector(
+          '.saved-location-temp'
+        )
+        const savedLocationIcon = locationDiv.querySelector(
+          '.saved-location-icon > img'
+        )
+        const savedLocationCondition = locationDiv.querySelector(
+          '.saved-location-condition'
+        )
+        const savedLocationTime = locationDiv.querySelector(
+          '.saved-location-time'
+        )
 
-    const tomorrowHumidity = document.querySelector(
-      '.tomorrow-humidity-measurement'
-    )
-    tomorrowHumidity.textContent = `${tomorrowForecastData.day.avghumidity}%`
+        if (savedLocationTemp) {
+          savedLocationTemp.textContent = `${currentWeatherData.temp_c}°C`
+          console.log('temp', savedLocationTemp)
+        }
+        if (savedLocationIcon) {
+          savedLocationIcon.src = currentWeatherData.condition.icon
+          savedLocationIcon.alt = currentWeatherData.condition.text
+        }
+        if (savedLocationCondition) {
+          savedLocationCondition.textContent = currentWeatherData.condition.text
+        }
+        if (savedLocationTime && locationWeatherData.localtime) {
+          const timeDate = new Date(locationWeatherData.localtime)
+          const timeFormatter = new Intl.DateTimeFormat('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+            timeZone: locationWeatherData.tz_id,
+            timeZoneName: 'shortOffset'
+          })
+          savedLocationTime.textContent = timeFormatter.format(timeDate)
+        }
+      } catch (error) {
+        console.log('Failed to get weather for saved location', error)
+        if (savedCitySpan) {
+          const errorElem = document.createElement('p')
+          errorElem.textContent = 'Error loading data'
+          errorElem.style.color = 'red'
+          locationDiv.appendChild(errorElem)
+        }
+      }
 
-    const tomorrowRain = document.querySelector('.tomorrow-rain-measurement')
-    tomorrowRain.textContent = `${await tomorrowForecastData.day.daily_will_it_rain}%`
+      locationDiv.addEventListener('click', () => {
+        displayWeather(savedCityName)
+        showContainer(document.querySelector('.home-container'))
+        homeButton.classList.add('fill')
+        dailyForecastButton.classList.remove('fill')
+        savedLocationButton.classList.remove('fill')
+      })
 
-    const upcomingDailyForecast = []
-
-    for (let i = 2; i < forecastWeather.forecastday.length; i++) {
-      upcomingDailyForecast.push(forecastWeather.forecastday[i])
-    }
-
-    const nextForecast = document.querySelector('.next-forecast')
-    if (nextForecast) {
-      nextForecast.innerHTML = ''
-    }
-
-    upcomingDailyForecast.forEach(day => {
-      const dailyDiv = document.createElement('div')
-      dailyDiv.classList.add('daily')
-
-      const date = new Date(day.date)
-      const formatted = date.toLocaleDateString('en-US', { weekday: 'short' })
-      const iconLink = day.day.condition.icon
-      const dailyCloudCondition = day.day.condition.text
-      const dailyTemp = day.day.avgtemp_c
-
-      const firstDayPara = document.createElement('p')
-      firstDayPara.textContent = formatted
-
-      const dayDiv = document.createElement('div')
-      const dayImg = document.createElement('img')
-      dayImg.src = iconLink
-      const daySpan = document.createElement('span')
-      daySpan.textContent = dailyCloudCondition
-      dayDiv.appendChild(dayImg)
-      dayDiv.appendChild(daySpan)
-
-      const secondDayPara = document.createElement('p')
-      secondDayPara.textContent = `${dailyTemp}°C`
-      secondDayPara.classList.add('daily-temp')
-
-      dailyDiv.appendChild(firstDayPara)
-      dailyDiv.appendChild(dayDiv)
-      dailyDiv.appendChild(secondDayPara)
-
-      nextForecast.appendChild(dailyDiv)
+      return null
     })
 
-    console.log('upcomingDailyForecast: ', upcomingDailyForecast)
-
-    // const new
+    await Promise.all(fetchPromises)
+    console.log('All saved location forecasts updated')
   } catch (error) {
-    console.log('Failed to get daily forecast', error)
+    console.error(`Error loading saved locations data`, error)
   }
 }
 
-getDailyForecast()
+getSavedLocationForecast()
 
-// async function getSavedLocationForecast() {
-//   try {
-//     const { WeatherJson } = await getWeather()
-//     const forecastWeather = await WeatherJson.forecast
+function addCityToSavedLocation(e) {
+  e.preventDefault()
 
-//     const locations = document.querySelectorAll('.location')
-//     locations.forEach(location => {
-//       const savedCity = document.querySelector(
-//         '.location > .city-wrapper > .city'
-//       )
-//       console.log('saved city!', savedCity.innerHTML)
-//     })
-//   } catch (error) {
-//     console.log('Failed to get weather for saved location', error)
-//   }
-// }
+  const locationWrapper = document.querySelector('.location-wrapper')
 
-// getSavedLocationForecast()
+  let savedSearch = document.getElementById('saved-search')
+  const input = savedSearch.value
+
+  const location = document.createElement('div')
+  location.classList.add('location')
+
+  const cityWrapper = document.createElement('div')
+  cityWrapper.classList.add('city-wrapper')
+
+  const cityName = document.createElement('p')
+  cityName.classList.add('big-text')
+  cityName.classList.add('city-name')
+  cityName.textContent = input
+
+  const savedLocationIcon = document.createElement('span')
+  savedLocationIcon.classList.add('saved-location-icon')
+  const img = document.createElement('img')
+  savedLocationIcon.appendChild(img)
+
+  const flexSpan = document.createElement('span')
+  flexSpan.classList.add('flex-span')
+
+  const savedLocationCondition = document.createElement('span')
+  savedLocationCondition.classList.add('saved-location-condition')
+
+  const savedLocationTime = document.createElement('span')
+  savedLocationTime.classList.add('saved-location-time')
+
+  flexSpan.appendChild(savedLocationCondition)
+  flexSpan.appendChild(savedLocationTime)
+
+  cityWrapper.appendChild(cityName)
+  cityWrapper.appendChild(savedLocationIcon)
+  cityWrapper.appendChild(flexSpan)
+
+  const savedLocationTemp = document.createElement('div')
+  savedLocationTemp.classList.add('saved-location-temp')
+
+  location.appendChild(cityWrapper)
+  location.appendChild(savedLocationTemp)
+
+  locationWrapper.appendChild(location)
+
+  savedSearch = ''
+
+  getSavedLocationForecast()
+}
+
+const savedSearchBtn = document.getElementById('saved-search-btn')
+
+savedSearchBtn.addEventListener('click', addCityToSavedLocation)
+
+const savedSearch = document.getElementById('saved-search')
+savedSearch.addEventListener('keypress', e => {
+  if (e.key === 'Enter') {
+    addCityToSavedLocation(e)
+  }
+})

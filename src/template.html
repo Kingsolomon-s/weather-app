@@ -70,14 +70,14 @@
               <g id="SVGRepo_iconCarrier">
                 <path
                   d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z"
-                  stroke="#000000"
+                  stroke="#eeeeee"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 ></path>
                 <path
                   d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z"
-                  stroke="#000000"
+                  stroke="#eeeeee"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -87,30 +87,32 @@
             <span class="place-span"></span>
           </p>
 
-          <div class="info-container">
-            <div class="icon-container">
-              <img class="overall-weather-icon" src="#" alt="weather icon" />
+          <div class="weather-container">
+            <div class="info-container">
+              <div class="icon-container">
+                <img class="overall-weather-icon" src="#" alt="weather icon" />
+              </div>
+              <p class="temp">23</p>
+              <p class="temp-feel">Feels like 21</p>
+              <p class="cloud-condition">Thunderclouds</p>
             </div>
-            <p class="temp">23</p>
-            <p class="temp-feel">Feels like 21</p>
-            <p class="cloud-condition">Thunderclouds</p>
-          </div>
 
-          <div class="weather-info">
-            <div class="wind">
-              <img src="./images/wind-svgrepo-com.svg" alt="wind-icon" />
-              <p class="wind-measurement">13 km/h</p>
-              <p>wind</p>
-            </div>
-            <div class="humidity">
-              <img src="./images/humidity-alt-svgrepo-com.svg" />
-              <p class="humdity-measurement">24%</p>
-              <p>Humidity</p>
-            </div>
-            <div class="rain">
-              <img src="./images/rain-alt-svgrepo-com.svg" />
-              <p class="rain-measurement">87%</p>
-              <p>Rain</p>
+            <div class="weather-info">
+              <div class="wind">
+                <img src="./images/wind-svgrepo-com.svg" alt="wind-icon" />
+                <p class="wind-measurement">13 km/h</p>
+                <p>wind</p>
+              </div>
+              <div class="humidity">
+                <img src="./images/humidity-alt-svgrepo-com.svg" />
+                <p class="humdity-measurement">24%</p>
+                <p>Humidity</p>
+              </div>
+              <div class="rain">
+                <img src="./images/rain-alt-svgrepo-com.svg" />
+                <p class="rain-measurement">87%</p>
+                <p>Rain</p>
+              </div>
             </div>
           </div>
           <div class="astronomy">
@@ -242,20 +244,20 @@
               <g id="SVGRepo_iconCarrier">
                 <path
                   d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z"
-                  stroke="#000000"
+                  stroke="#eeeeee"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 ></path>
                 <path
                   d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z"
-                  stroke="#000000"
+                  stroke="#eeeeee"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 ></path>
               </g></svg
-            >Saved Location
+            >Saved Cities
           </h3>
           <div class="search-container" id="saved-search-container">
             <input
@@ -263,7 +265,7 @@
               name="search"
               class="search"
               id="saved-search"
-              placeholder="Search for a place..."
+              placeholder="Add a city..."
             />
             <button class="search-btn" id="saved-search-btn">
               <svg
@@ -299,33 +301,55 @@
           <div class="location-wrapper">
             <div class="location">
               <div class="city-wrapper">
-                <p class="big-text city">Barcelona</p>
+                <p class="big-text city-name">Abeokuta</p>
                 <span class="saved-location-icon">
                   <img src="#" />
                 </span>
-                <span class="flex-span"><span>Mostly Sunny </span>10.00AM</span>
+                <span class="flex-span"
+                  ><span class="saved-location-condition">Mostly Sunny </span
+                  ><span class="saved-location-time">10.00AM</span>
+                </span>
               </div>
-              <div>18°C</div>
+              <div class="saved-location-temp">18°C</div>
             </div>
             <div class="location">
               <div class="city-wrapper">
-                <p class="big-text city">Ilorin</p>
+                <p class="big-text city-name">Barcelona</p>
                 <span class="saved-location-icon">
                   <img src="#" />
                 </span>
-                <span class="flex-span"><span>Mostly Sunny</span> 10.00AM</span>
+                <span class="flex-span"
+                  ><span class="saved-location-condition">Mostly Sunny </span
+                  ><span class="saved-location-time">10.00AM</span>
+                </span>
               </div>
-              <div>18°C</div>
+              <div class="saved-location-temp">18°C</div>
             </div>
             <div class="location">
               <div class="city-wrapper">
-                <p class="big-text city">Epe</p>
+                <p class="big-text city-name">Ilorin</p>
                 <span class="saved-location-icon">
                   <img src="#" />
                 </span>
-                <span class="flex-span"><span>Mostly Sunny </span>10.00AM</span>
+                <span class="flex-span"
+                  ><span class="saved-location-condition">Mostly Sunny </span
+                  ><span class="saved-location-time">10.00AM</span>
+                </span>
               </div>
-              <div>18°C</div>
+              <div class="saved-location-temp">18°C</div>
+            </div>
+            <div class="location">
+              <div class="city-wrapper">
+                <p class="big-text city-name">Epe</p>
+                <span class="saved-location-icon">
+                  <img src="#" />
+                </span>
+                <span class="flex-span"
+                  ><span class="saved-location-condition">Mostly Sunny </span
+                  ><span class="saved-location-time">10.00AM</span>
+                </span>
+              </div>
+              <div class="saved-location-temp">18°C</div>
             </div>
           </div>
         </div>
