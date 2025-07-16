@@ -87,10 +87,14 @@ async function getWeather(cityToFetch = city) {
     }
   } catch (error) {
     console.log('Failed to get weather data:', error)
-    alert(
-      `Could not fetch weather for "${city}". Please check the city name or your internet connection.`
-    )
-    place.textContent = 'Error'
+
+    setTimeout(() => {
+      alert(
+        `Could not fetch weather for "${city}". Please check the city name or your internet connection.`
+      )
+    }, 3500)
+
+    placeSpanContainer.textContent = 'Error'
     temp.textContent = '--'
     cloudCondition.textContent = 'Failed to load weather'
 
@@ -477,6 +481,9 @@ async function getSavedLocationForecast() {
     console.log('All saved location forecasts updated')
   } catch (error) {
     console.error(`Error loading saved locations data`, error)
+    alert(
+      `Could not fetch weather for ${city}. Please check your internet connection`
+    )
   }
 }
 

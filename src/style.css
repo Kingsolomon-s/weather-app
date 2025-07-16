@@ -7,6 +7,7 @@
 }
 body {
   background-color: #def2fd;
+  position: relative;
 }
 
 .loading-screen {
@@ -34,10 +35,14 @@ body {
 .container {
   max-width: 500px;
   margin: 0 auto;
-  padding: 30px 30px 100px 30px;
+  padding: 0 30px 100px 30px;
   position: relative;
   min-height: 100vh;
   display: none;
+}
+
+.home-container {
+  padding-top: 30px;
 }
 
 .search-container {
@@ -310,6 +315,7 @@ body {
 }
 .daily-forecast {
   display: none;
+  padding-top: 30px;
 }
 
 .days-forecast.fill > span:first-of-type,
@@ -403,7 +409,7 @@ body {
 }
 .saved-location {
   display: none;
-  padding-bottom: 100px;
+  padding: 30px 0 100px;
   color: #eee;
 }
 .saved-location h3 {
@@ -471,19 +477,60 @@ body {
 @media screen and (min-width: 768px) {
   div.container {
     max-width: 960px;
+    margin: unset;
+    margin-left: 250px;
   }
   .nav-bar {
     position: fixed;
-    height: 150px;
+    min-height: 100vh;
     top: 0;
-    max-width: 960px;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0 auto;
+    max-width: 250px;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: unset;
+    align-items: flex-start;
+    padding: 15px;
+
+    gap: 50px;
   }
-  .container > div:first-of-type {
-    margin-top: 220px;
+  .home {
+    margin-top: 40px;
   }
+  .nav-bar > * {
+    flex-direction: row;
+    justify-content: start;
+  }
+  .nav-bar > button {
+    font-size: 1.25rem;
+    width: 100%;
+    padding: 5px 0;
+  }
+  .nav-bar > button:hover,
+  .nav-bar > button:focus {
+    background-color: rgba(204, 204, 255, 0.3);
+    border-radius: 30px;
+  }
+
+  .days-forecast.fill,
+  .home.fill,
+  .saved.fill {
+    background-color: rgba(204, 204, 255, 0.3);
+    border-radius: 30px;
+    padding: 0;
+  }
+
+  .home.fill > span:first-of-type,
+  .saved.fill > span:first-of-type {
+    height: 50px;
+    padding: 12px 10px;
+    border-radius: 23px;
+  }
+  .days-forecast.fill > span:first-of-type {
+    height: 50px;
+    padding: 9px 10px;
+  }
+
   .search-container {
     height: 50px;
   }
@@ -492,6 +539,12 @@ body {
     height: 37px;
     top: 6px;
     right: 7px;
+  }
+  .daily:nth-of-type(2) {
+    grid-row: 2 / 3;
+  }
+  .daily:nth-of-type(3) {
+    grid-row: 3 / 4;
   }
 }
 
