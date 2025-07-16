@@ -226,9 +226,11 @@ async function getDailyForecast(forecastWeatherJson) {
       firstDayPara.textContent = formatted
 
       const dayDiv = document.createElement('div')
+      dayDiv.classList.add('day-div')
       const dayImg = document.createElement('img')
       dayImg.src = iconLink
       const daySpan = document.createElement('span')
+      daySpan.classList.add('day-span')
       daySpan.textContent = dailyCloudCondition
       dayDiv.appendChild(dayImg)
       dayDiv.appendChild(daySpan)
