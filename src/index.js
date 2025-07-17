@@ -13,6 +13,14 @@ const sunset = document.querySelector('.sunset-time')
 const moonrise = document.querySelector('.moonrise-time')
 const moonset = document.querySelector('.moonset-time')
 
+const mainSearchSuggestionContainer = document.getElementById(
+  'main-search-suggestions'
+)
+
+const savedSearchSuggestionsContainer = document.getElementById(
+  'saved-search-suggestions'
+)
+
 let city = 'lagos'
 
 const loadingScreen = document.querySelector('.loading-screen')
@@ -256,58 +264,58 @@ async function getDailyForecast(forecastWeatherJson) {
 
 const weatherBackgrounds = {
   // ☀️ Clear
-  1000: 'clear-sky.jpg',
+  1000: 'clear-sky.svg',
 
   // ☁️ Clouds
-  1003: 'partly-cloudy.jpg',
-  1006: 'cloudy-sky.jpg',
-  1009: 'overcast.jpg',
+  1003: 'partly-cloudy.svg',
+  1006: 'overcast.svg',
+  1009: 'overcast.svg',
 
   // 🌧️ Rain
-  1063: 'rain.jpeg',
-  1180: 'rain.jpeg',
-  1183: 'rain.jpeg',
-  1186: 'rain.jpeg',
-  1189: 'rain.jpeg',
-  1192: 'heavy-rain.jpeg',
-  1195: 'heavy-rain.jpeg',
-  1201: 'heavy-rain.jpeg',
-  1240: 'rain.jpeg',
-  1243: 'rain.jpeg',
-  1246: 'heavy-rain.jpeg',
+  1063: 'rain.svg',
+  1180: 'rain.svg',
+  1183: 'rain.svg',
+  1186: 'rain.svg',
+  1189: 'rain.svg',
+  1192: 'heavy-rain.svg',
+  1195: 'heavy-rain.svg',
+  1201: 'heavy-rain.svg',
+  1240: 'rain.svg',
+  1243: 'rain.svg',
+  1246: 'heavy-rain.svg',
 
   // ❄️ Snow
-  1066: 'snow.jpg',
-  1114: 'snow.jpg',
-  1117: 'snow.jpg',
-  1210: 'snow.jpg',
-  1213: 'snow.jpg',
-  1216: 'moderate-snow.jpg',
-  1219: 'snow.jpg',
-  1222: 'snow.jpg',
-  1225: 'snow.jpg',
-  1237: 'snow.jpg',
-  1255: 'snow.jpg',
-  1258: 'snow.jpg',
+  1066: 'snow.svg',
+  1114: 'snow.svg',
+  1117: 'snow.svg',
+  1210: 'snow.svg',
+  1213: 'snow.svg',
+  1216: 'snow.svg',
+  1219: 'snow.svg',
+  1222: 'snow.svg',
+  1225: 'snow.svg',
+  1237: 'snow.svg',
+  1255: 'snow.svg',
+  1258: 'snow.svg',
 
   // ⚡ Thunderstorms
-  1087: 'thunderstorm.jpg',
-  1273: 'thunderstorm.jpg',
-  1276: 'thunderstorm.jpg',
+  1087: 'thunderstorm.svg',
+  1273: 'thunderstorm.svg',
+  1276: 'thunderstorm.svg',
   1279: 'snow-thunder.jpg',
   1282: 'snow-thunder.jpg',
 
   // 🌫️ Fog / Mist
-  1030: 'fog.jpeg',
-  1135: 'fog.jpeg',
-  1147: 'fog.jpeg',
+  1030: 'fog.svg',
+  1135: 'fog.svg',
+  1147: 'fog.svg',
 
   // 🧊 Ice / Freezing Rain
-  1072: 'freezing-rain.jpeg',
-  1150: 'freezing-rain.jpeg',
-  1153: 'freezing-rain.jpeg',
-  1168: 'freezing-rain.jpeg',
-  1171: 'freezing-rain.jpeg',
+  1072: 'freezing-rain.svg',
+  1150: 'freezing-rain.svg',
+  1153: 'freezing-rain.svg',
+  1168: 'freezing-rain.svg',
+  1171: 'freezing-rain.svg',
 
   default: 'default.jpg'
 }
@@ -367,31 +375,6 @@ async function displayWeather(cityToDisplay = city) {
     console.log(`Failed to display weather data:`, err)
   }
 }
-
-const searchBtn = document.querySelector('#search-btn')
-
-function fetchValue(e) {
-  e.preventDefault()
-  const locationInput = document.getElementById('search')
-  const newCity = locationInput.value.trim()
-  if (newCity && newCity !== city) {
-    city = newCity
-    console.log(`searching for: ${city}`)
-    displayWeather(city)
-  } else if (!newCity) {
-    alert('Please enter a city name.')
-  }
-  locationInput.value = ''
-}
-
-const locationInput = document.getElementById('search')
-locationInput.addEventListener('keypress', e => {
-  if (e.key === 'Enter') {
-    fetchValue(e)
-  }
-})
-
-searchBtn.addEventListener('click', fetchValue)
 
 displayWeather(city)
 
@@ -499,6 +482,25 @@ function addCityToSavedLocation(e) {
   let savedSearch = document.getElementById('saved-search')
   const input = savedSearch.value
 
+  savedSearchSuggestionsContainer.innerHTML = ''
+
+  if (!input) {
+    alert('Please enter a city name to save.')
+    return
+  }
+
+  const existingCities = Array.from(
+    document.querySelectorAll('.location .city-name')
+  ).map(span => {
+    span.textContent.trim().toLowerCase()
+  })
+
+  if (existingCities.includes(input.toLowerCase())) {
+    alert(`${input} is already in your saved locations.`)
+    savedSearch.value = ''
+    return
+  }
+
   const location = document.createElement('div')
   location.classList.add('location')
 
@@ -552,5 +554,135 @@ const savedSearch = document.getElementById('saved-search')
 savedSearch.addEventListener('keypress', e => {
   if (e.key === 'Enter') {
     addCityToSavedLocation(e)
+  }
+})
+
+const searchBtn = document.querySelector('#search-btn')
+
+function fetchValue(e) {
+  e.preventDefault()
+  const locationInput = document.getElementById('search')
+  const newCity = locationInput.value.trim()
+
+  mainSearchSuggestionContainer.innerHTML = ''
+
+  if (newCity && newCity !== city) {
+    city = newCity
+    console.log(`searching for: ${city}`)
+    displayWeather(city)
+  } else if (!newCity) {
+    alert('Please enter a city name.')
+  }
+  locationInput.value = ''
+}
+
+const locationInput = document.getElementById('search')
+locationInput.addEventListener('keypress', e => {
+  if (e.key === 'Enter') {
+    fetchValue(e)
+  }
+})
+
+searchBtn.addEventListener('click', fetchValue)
+
+async function getAutocompleteSuggestions(query) {
+  if (query.length < 2) {
+    return []
+  }
+
+  const apiKey = '8409f078b588400595c175418251107'
+
+  try {
+    const response = await fetch(
+      `https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${query}`
+    )
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error('Failed to fetch autocomplete suggestions:', error)
+  }
+}
+
+function displaySuggestions(suggestions, targetInput, targetContainer) {
+  targetContainer.innerHTML = ''
+
+  if (suggestions.length === 0) {
+    return
+  }
+
+  suggestions.forEach(location => {
+    const suggestionDiv = document.createElement('div')
+    const suggestionSpan = document.createElement('span')
+
+    suggestionDiv.textContent = `${location.name}`
+
+    suggestionSpan.textContent = `${location.region ? `${location.region}, ` : ''}${location.country}`
+
+    suggestionDiv.addEventListener('click', () => {
+      targetInput.value = location.name
+      targetContainer.innerHTML = ''
+
+      if (targetInput.id === 'search') {
+        displayWeather(location.name)
+
+        showContainer(document.querySelector('.home-container'))
+        homeButton.classList.add('fill')
+        dailyForecastButton.classList.remove('fill')
+        savedLocationButton.classList.remove('fill')
+      } else if (targetInput.id === 'saved-search') {
+        // coming back to this
+      }
+    })
+
+    suggestionDiv.appendChild(suggestionSpan)
+    targetContainer.appendChild(suggestionDiv)
+  })
+}
+
+locationInput.addEventListener('input', async e => {
+  const query = e.target.value.trim()
+
+  if (query.length > 1) {
+    const suggestions = await getAutocompleteSuggestions(query)
+    displaySuggestions(
+      suggestions,
+      locationInput,
+      mainSearchSuggestionContainer
+    )
+  } else {
+    mainSearchSuggestionContainer.innerHTML = ''
+  }
+})
+
+savedSearch.addEventListener('input', async e => {
+  const query = e.target.value.trim()
+
+  if (query.length > 1) {
+    const suggestions = await getAutocompleteSuggestions(query)
+    displaySuggestions(
+      suggestions,
+      savedSearch,
+      savedSearchSuggestionsContainer
+    )
+  } else {
+    savedSearchSuggestionsContainer.innerHTML = ''
+  }
+})
+
+document.addEventListener('click', e => {
+  if (
+    !locationInput.contains(e.target) &&
+    !mainSearchSuggestionContainer.contains(e.target)
+  ) {
+    mainSearchSuggestionContainer.innerHTML = ''
+  }
+  if (
+    !savedSearch.contains(e.target) &&
+    !savedSearchSuggestionsContainer.contains(e.target)
+  ) {
+    savedSearchSuggestionsContainer.innerHTML = ''
   }
 })
