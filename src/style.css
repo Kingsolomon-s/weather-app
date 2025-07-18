@@ -116,6 +116,24 @@ body {
   gap: 4px;
   color: #000;
 }
+.place.white,
+.hourly-weather.white > div,
+.next-forecast.white,
+.astronomy.white,
+.tomorrow-forecast.white,
+.saved-location.white,
+.saved-location.white h3 {
+  color: #fff;
+}
+
+.saved-location.white > h3 > svg,
+.place.white > svg {
+  stroke: #fff;
+}
+.saved-location > h3 > svg,
+.place > svg {
+  stroke: #000;
+}
 
 .temp {
   font-size: 3.5rem;
@@ -366,6 +384,7 @@ body {
 }
 .tomorrow-info {
   padding: 20px 0;
+  color: #000;
 }
 .tomorrow-forecast {
   font-family: 'poppins';

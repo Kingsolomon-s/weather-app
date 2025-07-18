@@ -338,6 +338,33 @@ async function displayWeather(cityToDisplay = city) {
       const { code } = currentWeather.condition
       console.log('code', code)
 
+      if (
+        code === 1006 ||
+        code === 1009 ||
+        code === 1030 ||
+        code === 1135 ||
+        code === 1147 ||
+        code === 1087 ||
+        code === 1273 ||
+        code === 1276
+      ) {
+        const place = document.querySelector('.place')
+        place.classList.add('white')
+        document.querySelector('.hourly-weather').classList.add('white')
+        document.querySelector('.next-forecast').classList.add('white')
+        document.querySelector('.saved-location').classList.add('white')
+        document.querySelector('.astronomy').classList.add('white')
+        document.querySelector('.tomorrow-forecast').classList.add('white')
+      } else {
+        const place = document.querySelector('.place')
+        place.classList.remove('white')
+        document.querySelector('.hourly-weather').classList.remove('white')
+        document.querySelector('.next-forecast').classList.remove('white')
+        document.querySelector('.saved-location').classList.remove('white')
+        document.querySelector('.astronomy').classList.remove('white')
+        document.querySelector('.tomorrow-forecast').classList.remove('white')
+      }
+
       const bg = weatherBackgrounds[code] || weatherBackgrounds.default
       console.log(bg)
       setBackground(bg)
@@ -491,9 +518,7 @@ function addCityToSavedLocation(e) {
 
   const existingCities = Array.from(
     document.querySelectorAll('.location .city-name')
-  ).map(span => {
-    span.textContent.trim().toLowerCase()
-  })
+  ).map(span => span.textContent.trim().toLowerCase())
 
   if (existingCities.includes(input.toLowerCase())) {
     alert(`${input} is already in your saved locations.`)
@@ -627,6 +652,7 @@ function displaySuggestions(suggestions, targetInput, targetContainer) {
 
       if (targetInput.id === 'search') {
         displayWeather(location.name)
+        targetInput.value = ''
 
         showContainer(document.querySelector('.home-container'))
         homeButton.classList.add('fill')
@@ -634,6 +660,7 @@ function displaySuggestions(suggestions, targetInput, targetContainer) {
         savedLocationButton.classList.remove('fill')
       } else if (targetInput.id === 'saved-search') {
         // coming back to this
+        targetInput.value = ''
       }
     })
 
